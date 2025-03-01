@@ -56,7 +56,7 @@ export default function Home() {
               <Link href="#features" className="text-white hover:text-pink-200 transition">
                 Code Battle
               </Link>
-              <Link href="#how-it-works" className="text-white hover:text-pink-200 transition">
+              <Link href="/playground" className="text-white hover:text-pink-200 transition">
                 Playground
               </Link>
               <Link href="#testimonials" className="text-white hover:text-pink-200 transition">
@@ -103,6 +103,7 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <Button
+                    
                       size="lg"
                       className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white border-none"
                     >

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.22.0",
+    "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-slot": "^1.1.2",
     "axios": "^1.8.1",
     "class-variance-authority": "^0.7.1",
@@ -18,9 +20,10 @@
     "firebase": "^11.4.0",
     "fs": "^0.0.1-security",
     "lucide-react": "^0.477.0",
-    "next": "14.2.16",
-    "react": "^18",
-    "react-dom": "^18",
+    "monaco-editor": "^0.52.2",
+    "next": "^14.2.16",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7"
   },

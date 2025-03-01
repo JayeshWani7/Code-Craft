@@ -1,35 +1,43 @@
 const express = require("express");
-const axios = require("axios");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+require("dotenv").config(); // Load API key from .env file
 
 const app = express();
-const PORT = 5000;
-const OLLAMA_URL = "http://localhost:11434/api/generate";
+const PORT = 5002;
+const GEMINI_API_KEY = "AIzaSyCXS8cqy_sJSRRjAh5rW9Q1sToqigK_5Nw"; // Store API key in .env file
 
-// Function to generate coding questions
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI("AIzaSyCXS8cqy_sJSRRjAh5rW9Q1sToqigK_5Nw");
+
 const generateQuestions = async () => {
   const finalPrompt = `
-  Generate 10 Java coding questions for beginners and intermediate level.
+  You are a Java coding problem generator. Your task is to create 10 Java-based coding questions of varying difficulty from beginner, intermediate. Follow these guidelines:
+- Generate a mix of problems: 5 beginner, 5 intermediate.
+- Ensure questions cover different concepts such as output, variables, datatypes, typecasting, strings, booleans, if-else, switch, loops.
 
-  Format the response strictly in JSON.
+Generate questions, solution and hints.
+
+- Return all 10 questions, solutions and hints in a JSON format.
+{
+    Question:""
+    Solution:""
+    Hint:""
+}
+    
+
   `;
 
-  const data = {
-    model: "LearnCode",
-    prompt: finalPrompt,
-    stream: false,
-  };
-
   try {
-    const response = await axios.post(OLLAMA_URL, data, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Use latest stable version
+    const result = await model.generateContent(finalPrompt);
+    const response = await result.response.text(); // Extract text response
 
-    if (response.status === 200) {
-      return response.data.response;
-    } else {
-      return { error: `API error: ${response.statusText}` };
-    }
+    // Gemini sometimes wraps JSON in markdown (```json ... ```)
+    const cleanedResponse = response.replace(/```json|```/g, "").trim();
+
+    return JSON.parse(cleanedResponse); // Parse JSON correctly
   } catch (error) {
+    console.error("Error generating questions:", error);
     return { error: `Request failed: ${error.message}` };
   }
 };

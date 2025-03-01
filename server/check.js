@@ -1,63 +1,45 @@
 const express = require("express");
-const fs = require("fs");
-const axios = require("axios");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+require("dotenv").config(); // Load API key from .env file
 
 const app = express();
 const PORT = 5001;
-const OLLAMA_URL = "http://localhost:11434/api/generate";
-const FILE_NAME = "server/sample.java"; // Adjust path if needed
+const GEMINI_API_KEY = "AIzaSyCXS8cqy_sJSRRjAh5rW9Q1sToqigK_5Nw"; // Store API key in .env file
 
-// Function to read Java file
-const readJavaFile = () => {
-  try {
-    return fs.readFileSync(FILE_NAME, "utf8");
-  } catch (error) {
-    return { error: "Failed to read Java file" };
-  }
-};
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI("AIzaSyCXS8cqy_sJSRRjAh5rW9Q1sToqigK_5Nw");
 
-// Function to check solution correctness
-const checkSolution = async (javaCode) => {
-  const prompt = `
-  You are a Java coding assistant. Only return a JSON response.
+const generateQuestions = async () => {
+  const finalPrompt = `
+  You are a Java coding assistant. Check if the given Java code is correct for solving the problem.
+- Generate 3-4 test cases.
+- Run the code against them.
+You don't have to explain anything 
+- If all test cases pass, return: {{ "status": "Success", "message": "Solution is correct!" }}
+- If any test case fail, return: {{ "status": "Failure", "message": "Try again. Some test cases failed." }}
+    
 
-  Java Code:
-  \`\`\`java
-  ${javaCode}
-  \`\`\`
   `;
 
-  const data = {
-    model: "LearnCode",
-    prompt: prompt,
-    stream: false,
-  };
-
   try {
-    const response = await axios.post(OLLAMA_URL, data, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Use latest stable version
+    const result = await model.generateContent(finalPrompt);
+    const response = await result.response.text(); // Extract text response
 
-    if (response.status === 200) {
-      return response.data.response;
-    } else {
-      return { error: `API error: ${response.statusText}` };
-    }
+    // Gemini sometimes wraps JSON in markdown (```json ... ```)
+    const cleanedResponse = response.replace(/```json|```/g, "").trim();
+
+    return JSON.parse(cleanedResponse); // Parse JSON correctly
   } catch (error) {
+    console.error("Error generating questions:", error);
     return { error: `Request failed: ${error.message}` };
   }
 };
 
-// API endpoint to test Java solution
-app.get("/test-solution", async (req, res) => {
-  const javaCode = readJavaFile();
-
-  if (javaCode.error) {
-    return res.json(javaCode);
-  }
-
-  const result = await checkSolution(javaCode);
-  res.json(result);
+// API endpoint to get generated questions
+app.get("/test-solutions", async (req, res) => {
+  const questions = await generateQuestions();
+  res.json(questions);
 });
 
 app.listen(PORT, () => {
