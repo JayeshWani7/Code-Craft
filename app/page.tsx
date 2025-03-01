@@ -54,13 +54,13 @@ export default function Home() {
             </div>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="#features" className="text-white hover:text-pink-200 transition">
-                Features
+                Code Battle
               </Link>
               <Link href="#how-it-works" className="text-white hover:text-pink-200 transition">
-                How It Works
+                Playground
               </Link>
               <Link href="#testimonials" className="text-white hover:text-pink-200 transition">
-                Testimonials
+                Story Mode tutorials
               </Link>
               <Link href="#pricing" className="text-white hover:text-pink-200 transition">
                 Pricing
