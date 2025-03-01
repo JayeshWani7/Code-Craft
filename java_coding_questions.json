@@ -1,0 +1,62 @@
+[
+    {
+        "question": "Write a Java program to calculate the area of a circle.",
+        "hint": "Area = pi x r^2",
+        "solution": "public class CircleArea { public static void main(String[] args) { float radius = 5; double area = Math.PI * (radius * radius); System.out.println(\"The area of the circle is \" + area); } }",
+        "difficulty": "Beginner"
+    },
+    {
+        "question": "Write a Java program to convert Celsius to Fahrenheit.",
+        "hint": "Formula: (C - 32) * 5/9",
+        "solution": "public class CelsiusToFahrenheit { public static void main(String[] args) { float celsius = 0; float fahrenheit = (celsius - 32) * 5/9; System.out.println(\"The temperature in Fahrenheit is \" + fahrenheit); } }",
+        "difficulty": "Beginner"
+    },
+    {
+        "question": "Write a Java program to calculate the factorial of a given number.",
+        "hint": "Factorial = n! = n x (n-1) x (n-2) ... x 1",
+        "solution": "public class Factorial { public static void main(String[] args) { int n = 5; int result = 1; for (int i = n; i >= 1; i--) { result *= i; } System.out.println(\"The factorial of \" + n + \" is \" + result); } }",
+        "difficulty": "Beginner"
+    },
+    {
+        "question": "Write a Java program to calculate the sum of digits of a given number.",
+        "hint": "For example, if the number is 1234, the sum will be 1+2+3+4 = 10",
+        "solution": "public class SumOfDigits { public static void main(String[] args) { int num = 1234; int sum = 0; while (num > 0) { sum += num % 10; num /= 10; } System.out.println(\"The sum of digits of \" + num + \" is \" + sum); } }",
+        "difficulty": "Beginner"
+    },
+    {
+        "question": "Write a Java program to calculate the distance between two points on a coordinate plane.",
+        "hint": "Use the formula: distance = sqrt((x2-x1)^2 + (y2-y1)^2)",
+        "solution": "public class DistanceBetweenPoints { public static void main(String[] args) { int x1 = 3, y1 = 4; int x2 = 6, y2 = 8; double distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); System.out.println(\"The distance between the two points is \" + distance); } }",
+        "difficulty": "Beginner"
+    },
+    {
+        "question": "Write a Java program to calculate the area of a rectangle.",
+        "hint": "Area = length x breadth",
+        "solution": "public class RectangleArea { public static void main(String[] args) { int length = 5, breadth = 3; double area = length * breadth; System.out.println(\"The area of the rectangle is \" + area); } }",
+        "difficulty": "Intermediate"
+    },
+    {
+        "question": "Write a Java program to calculate the perimeter of a rectangle.",
+        "hint": "Perimeter = 2(length + breadth)",
+        "solution": "public class RectanglePerimeter { public static void main(String[] args) { int length = 5, breadth = 3; double perimeter = 2 * (length + breadth); System.out.println(\"The perimeter of the rectangle is \" + perimeter); } }",
+        "difficulty": "Intermediate"
+    },
+    {
+        "question": "Write a Java program to calculate the area of a triangle.",
+        "hint": "Area = base x height / 2",
+        "solution": "public class TriangleArea { public static void main(String[] args) { int base = 5, height = 6; double area = (base * height) / 2; System.out.println(\"The area of the triangle is \" + area); } }",
+        "difficulty": "Intermediate"
+    },
+    {
+        "question": "Write a Java program to calculate the perimeter of a triangle.",
+        "hint": "Perimeter = base + height x 2",
+        "solution": "public class TrianglePerimeter { public static void main(String[] args) { int base = 5, height = 6; double perimeter = base + (height * 2); System.out.println(\"The perimeter of the triangle is \" + perimeter); } }",
+        "difficulty": "Intermediate"
+    },
+    {
+        "question": "Write a Java program to calculate the volume of a cylinder.",
+        "hint": "Volume = \u03c0 x radius^2 x height",
+        "solution": "public class CylinderVolume { public static void main(String[] args) { double pi = Math.PI; int radius = 5, height = 6; double volume = pi * (radius * radius) * height; System.out.println(\"The volume of the cylinder is \" + volume); } }",
+        "difficulty": "Intermediate"
+    }
+]
