@@ -1,9 +1,25 @@
+"use client";
+
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Code, Sparkles, Brain, Rocket, Star, ChevronRight, Github, Twitter, Linkedin } from "lucide-react"
+import { signInWithGoogle, logout } from "@/lib/firebaseConfig";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+
 
 export default function Home() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // Cleanup function to avoid memory leaks
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500">
       {/* Floating candy elements */}
@@ -51,8 +67,12 @@ export default function Home() {
               </Link>
             </nav>
             <div className="flex gap-3">
-              <Button variant="ghost" className="text-white hover:bg-white/20">
-                Login
+              <Button
+                variant="ghost"
+                className="text-white hover:bg-white/20"
+                onClick={user ? logout : signInWithGoogle}
+              >
+                {user ? "Logout" : "Login"}
               </Button>
               <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white border-none">
                 Get Started
