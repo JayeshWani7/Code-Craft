@@ -109,7 +109,7 @@ export default function Home() {
                       Start Coding Now
                       <ChevronRight className="ml-2" size={18} />
                     </Button>
-                    <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/20">
+                    <Button size="lg" variant="outline" className="border-white/30 text-black hover:bg-white/20">
                       Watch Demo
                     </Button>
                   </div>
