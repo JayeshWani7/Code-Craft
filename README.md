@@ -59,9 +59,6 @@ npm run dev
 - Code Execution: Docker containers for secure code execution
 - Real-time Communication: Socket.io for multiplayer functionality
 
-## Contributing
-
-We welcome contributions from the community! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
 
 ## License
 
