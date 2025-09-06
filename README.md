@@ -5,6 +5,7 @@ A comprehensive platform for learning and mastering coding skills through intera
 ## Overview
 
 Code-Craft is an innovative coding education platform designed to help users of all experience levels improve their programming skills. Whether you're a complete beginner looking to get started with no-code solutions, or an experienced developer wanting to test your skills against others, Code-Craft provides the tools and environment you need to succeed.
+[PPT Link](https://www.canva.com/design/DAGgiVtx80U/YaoOowtj1vV8eLi3hSl9iA/edit?ui=eyJEIjp7IlAiOnsiQiI6ZmFsc2V9fX0)
 
 ## Key Features
 
@@ -58,7 +59,7 @@ npm run dev
 - Authentication: JWT, OAuth
 - Code Execution: Docker containers for secure code execution
 - Real-time Communication: Socket.io for multiplayer functionality
-
+ 
 
 ## License
 
@@ -66,7 +67,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Project Maintainer**: Jayesh Wani
+- **Project Maintainer**: Team Colders
 - **GitHub**: [JayeshWani7](https://github.com/JayeshWani7)
 - **Issues**: [Report a bug](https://github.com/JayeshWani7/Code-Craft/issues)
 
