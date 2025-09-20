@@ -53,7 +53,7 @@ export default function Home() {
               <span className="text-white font-bold text-xl">CodingCraft</span>
             </div>
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="#features" className="text-white hover:text-pink-200 transition">
+              <Link href="https://prismatic-gumdrop-e8fdf4.netlify.app/" className="text-white hover:text-pink-200 transition">
                 Code Battle
               </Link>
               <Link href="/playground" className="text-white hover:text-pink-200 transition">
