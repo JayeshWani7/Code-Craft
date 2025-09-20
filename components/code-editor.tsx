@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import Editor from "@monaco-editor/react"
+import type * as monaco from "monaco-editor"
 
 interface CodeEditorProps {
   value: string
@@ -10,9 +11,8 @@ interface CodeEditorProps {
 }
 
 export default function CodeEditor({ value, onChange, language }: CodeEditorProps) {
-  const editorRef = useRef(null)
-
-  const handleEditorDidMount = (editor) => {
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor
   }
 
@@ -21,7 +21,7 @@ export default function CodeEditor({ value, onChange, language }: CodeEditorProp
       height="100%"
       defaultLanguage={language}
       value={value}
-      onChange={onChange}
+      onChange={(value) => onChange(value ?? "")}
       onMount={handleEditorDidMount}
       theme="vs-dark"
       options={{

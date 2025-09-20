@@ -257,7 +257,7 @@ export default function Home() {
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">What Our Users Say</h2>
               <p className="text-white/70 max-w-2xl mx-auto">
-                Join thousands of happy coders who've leveled up their skills with CodingCraft
+                Join thousands of happy coders who&apos;ve leveled up their skills with CodingCraft
               </p>
             </div>
 
@@ -304,7 +304,7 @@ export default function Home() {
                       <p className="text-white/60 text-sm">{testimonial.role}</p>
                     </div>
                   </div>
-                  <p className="text-white/80 italic">"{testimonial.quote}"</p>
+                  <p className="text-white/80 italic">&quot;{testimonial.quote}&quot;</p>
                   <div className="mt-4 flex">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="text-yellow-400 fill-yellow-400" size={16} />
@@ -434,7 +434,7 @@ export default function Home() {
                   Ready to Make Coding as Fun as Candy Crush?
                 </h2>
                 <p className="text-white/80 text-lg mb-8">
-                  Join thousands of developers who've transformed their coding journey from frustrating to fun. Start
+                  Join thousands of developers who&apos;ve transformed their coding journey from frustrating to fun. Start
                   your adventure today!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

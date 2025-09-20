@@ -28,6 +28,14 @@ import {
 } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 
+interface Question {
+  Question: string
+  Solution: string
+  Hint: string
+  ExpectedOutput: string
+  Points: number
+}
+
 interface TestSession {
   startTime: number
   endTime: number
@@ -49,7 +57,6 @@ const MOUSE_TIME_LIMIT = 60 // 60 seconds per question
 export default function CodingChallenge() {
   const [isTestStarted, setIsTestStarted] = useState(false)
   const [showInstructions, setShowInstructions] = useState(true)
-  const [isFullScreen, setIsFullScreen] = useState(false)
   const [timeRemaining, setTimeRemaining] = useState(60 * 60) // 60 minutes in seconds
   const [warnings, setWarnings] = useState(0)
   const [tabSwitches, setTabSwitches] = useState(0)
@@ -63,7 +70,7 @@ export default function CodingChallenge() {
     submissions: [],
   })
   const [showEndDialog, setShowEndDialog] = useState(false)
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [code, setCode] = useState(
     "// Write your Java code here\n\npublic class Solution {\n    public static void main(String[] args) {\n        // Your solution\n    }\n}",
@@ -100,14 +107,19 @@ export default function CodingChallenge() {
     setTabSwitches(0)
 
     // Enter full screen
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen()
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen()
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen()
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen()
+    const docElement = document.documentElement as HTMLElement & {
+      mozRequestFullScreen?: () => Promise<void>
+      webkitRequestFullscreen?: () => Promise<void>
+      msRequestFullscreen?: () => Promise<void>
+    }
+    if (docElement.requestFullscreen) {
+      docElement.requestFullscreen()
+    } else if (docElement.mozRequestFullScreen) {
+      docElement.mozRequestFullScreen()
+    } else if (docElement.webkitRequestFullscreen) {
+      docElement.webkitRequestFullscreen()
+    } else if (docElement.msRequestFullscreen) {
+      docElement.msRequestFullscreen()
     }
   }, [])
 
@@ -146,6 +158,43 @@ export default function CodingChallenge() {
       document.removeEventListener("keydown", preventKeyboardShortcuts)
     }
   }, [isTestStarted])
+
+  // Move handleEndTest before addWarning
+  const handleEndTest = useCallback((reason?: string) => {
+    setIsTestStarted(false)
+    setShowEndDialog(true)
+    setTestSession((prev) => ({
+      ...prev,
+      endTime: Date.now(),
+    }))
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    }
+
+    // If ended due to violations or time expiration, show alert and redirect
+    if (reason) {
+      alert(`Test terminated: ${reason}. You will be redirected to the main page.`)
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
+  }, []) // Empty dependency array since it doesn't depend on any props or state
+
+  const startMouseTimer = useCallback(() => {
+    if (mouseTimer.current) {
+      clearInterval(mouseTimer.current)
+    }
+
+    mouseTimer.current = setInterval(() => {
+      setMouseTimeRemaining((prev) => {
+        if (prev <= 1) {
+          handleEndTest("Mouse time limit exceeded")
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }, [handleEndTest])
 
   // Mouse tracking
   useEffect(() => {
@@ -186,44 +235,7 @@ export default function CodingChallenge() {
       document.removeEventListener("mousemove", handleMouseMove)
       clearTimeout(mouseStopTimeout)
     }
-  }, [isTestStarted, mouseActive, currentQuestionIndex])
-
-  const startMouseTimer = () => {
-    if (mouseTimer.current) {
-      clearInterval(mouseTimer.current)
-    }
-
-    mouseTimer.current = setInterval(() => {
-      setMouseTimeRemaining((prev) => {
-        if (prev <= 1) {
-          handleEndTest("Mouse time limit exceeded")
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
-
-  // Move handleEndTest before addWarning
-  const handleEndTest = useCallback((reason?: string) => {
-    setIsTestStarted(false)
-    setShowEndDialog(true)
-    setTestSession((prev) => ({
-      ...prev,
-      endTime: Date.now(),
-    }))
-    if (document.fullscreenElement) {
-      document.exitFullscreen()
-    }
-
-    // If ended due to violations or time expiration, show alert and redirect
-    if (reason) {
-      alert(`Test terminated: ${reason}. You will be redirected to the main page.`)
-      setTimeout(() => {
-        window.location.reload()
-      }, 2000)
-    }
-  }, []) // Empty dependency array since it doesn't depend on any props or state
+  }, [isTestStarted, mouseActive, currentQuestionIndex, startMouseTimer])
 
   // Modified warning system
   const addWarning = useCallback(() => {
@@ -264,7 +276,6 @@ export default function CodingChallenge() {
           warnings: prev.warnings + 1,
         }))
       }
-      setIsFullScreen(!!document.fullscreenElement)
     }
 
     document.addEventListener("fullscreenchange", handleFullscreenChange)
@@ -465,7 +476,7 @@ export default function CodingChallenge() {
       }
     })
 
-    return Array.from(correctSubmissions).reduce((total, questionIndex) => {
+    return Array.from(correctSubmissions).reduce((total: number, questionIndex) => {
       return total + questions[questionIndex as number].Points
     }, 0)
   }
@@ -626,7 +637,7 @@ export default function CodingChallenge() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Test Complete</DialogTitle>
-            <DialogDescription>Here's your test summary:</DialogDescription>
+            <DialogDescription>Here&apos;s your test summary:</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
@@ -652,7 +663,7 @@ export default function CodingChallenge() {
 }
 
 // Simulation function remains the same
-const simulateJavaExecution = (javaCode) => {
+const simulateJavaExecution = (javaCode: string): string => {
   if (javaCode.includes('System.out.println("Hello World")')) {
     return "Hello World"
   }

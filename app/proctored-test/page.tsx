@@ -49,7 +49,7 @@ const MOUSE_TIME_LIMIT = 60 // 60 seconds per question
 export default function CodingChallenge() {
   const [isTestStarted, setIsTestStarted] = useState(false)
   const [showInstructions, setShowInstructions] = useState(true)
-  const [isFullScreen, setIsFullScreen] = useState(false)
+  // Removed unused setIsFullScreen state
   const [timeRemaining, setTimeRemaining] = useState(60 * 60) // 60 minutes in seconds
   const [warnings, setWarnings] = useState(0)
   const [tabSwitches, setTabSwitches] = useState(0)
@@ -63,7 +63,14 @@ export default function CodingChallenge() {
     submissions: [],
   })
   const [showEndDialog, setShowEndDialog] = useState(false)
-  const [questions, setQuestions] = useState([])
+  type Question = {
+    Question: string
+    Solution: string
+    Hint: string
+    ExpectedOutput: string
+    Points: number
+  }
+  const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [code, setCode] = useState(
     "// Write your Java code here\n\npublic class Solution {\n    public static void main(String[] args) {\n        // Your solution\n    }\n}",
@@ -102,12 +109,12 @@ export default function CodingChallenge() {
     // Enter full screen
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen()
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen()
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen()
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen()
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen()
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen()
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen()
     }
   }, [])
 
@@ -264,7 +271,7 @@ export default function CodingChallenge() {
           warnings: prev.warnings + 1,
         }))
       }
-      setIsFullScreen(!!document.fullscreenElement)
+      // Removed setIsFullScreen as it's unused
     }
 
     document.addEventListener("fullscreenchange", handleFullscreenChange)
@@ -457,16 +464,18 @@ export default function CodingChallenge() {
     setShowHint(!showHint)
   }
 
-  const calculateScore = () => {
-    const correctSubmissions = new Set()
+  const calculateScore = (): number => {
+    const correctSubmissions = new Set<number>()
     testSession.submissions.forEach((submission) => {
       if (submission.isCorrect) {
         correctSubmissions.add(submission.questionIndex)
       }
     })
 
+    if (!questions || questions.length === 0) return 0
+
     return Array.from(correctSubmissions).reduce((total, questionIndex) => {
-      return total + questions[questionIndex as number].Points
+      return total + (questions[questionIndex]?.Points || 0)
     }, 0)
   }
 
@@ -626,7 +635,7 @@ export default function CodingChallenge() {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Test Complete</DialogTitle>
-            <DialogDescription>Here's your test summary:</DialogDescription>
+            <DialogDescription>Here&apos;s your test summary:</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
@@ -652,7 +661,7 @@ export default function CodingChallenge() {
 }
 
 // Simulation function remains the same
-const simulateJavaExecution = (javaCode) => {
+const simulateJavaExecution = (javaCode: string) => {
   if (javaCode.includes('System.out.println("Hello World")')) {
     return "Hello World"
   }
